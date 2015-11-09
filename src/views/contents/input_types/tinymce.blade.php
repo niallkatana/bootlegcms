@@ -1,7 +1,7 @@
 <?php
 if(@$content){
 
-    $settingAfterEvent = \Event::fire('content.tinymce.draw', array('content'=>$content, 'setting'=>$setting));    
+    $settingAfterEvent = \Event::fire('content.tinymce.draw', array('content'=>$content, 'setting'=>$setting));
     $settingAfterEvent = reset($settingAfterEvent);
     if(!empty($settingAfterEvent)){
         $setting = $settingAfterEvent;
@@ -56,7 +56,21 @@ $niceName = preg_replace('/\s+/', '', $setting->name);
             plugins: ["link", "code", "hr", "image", "table", "media", "uploadImage"],
             toolbar:"undo redo | styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image upload",
             relative_urls: false,
-            entity_encoding : "raw"
+            entity_encoding : "raw",
+           setup: function (editor) {
+               editor.on('change', function () {
+                   editor.save();
+               });
+           }
         });
+
+        $('body').on('click', '.js-content-update', function(){
+            tinymce.triggerSave();
+        });
+
+
+
+
+
     });
 </script>
